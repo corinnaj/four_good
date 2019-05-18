@@ -24,6 +24,17 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Image.network(widget.project.picture),
+            if (widget.project.isExternal)
+              Container(
+                decoration: new BoxDecoration(
+                  color: Colors.indigoAccent
+                ),
+                child: Text(widget.project.website,
+                  style: Theme.of(context)
+                    .textTheme
+                    .title
+                    .copyWith(color: Colors.white)),
+              ),
             Center(
                 child: Text(
               widget.project.description,
@@ -31,11 +42,19 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
             )),
             if (widget.project.geoPoint != null)
               Container(width: 200, height: 200, child: _buildMap()),
-            Center(
-              child: RaisedButton(
-                child: Text('Do it 4 Good!'),
+            if (widget.project.isExternal)
+              Center(
+                child: RaisedButton(
+                  onPressed: () {},
+                  child: Text('Visit external website'),
+                ),
               ),
-            )
+            if (!widget.project.isExternal)
+              Center(
+                child: RaisedButton(
+                  child: Text('Do it 4 Good!'),
+                ),
+              )
           ],
         ),
       ),
