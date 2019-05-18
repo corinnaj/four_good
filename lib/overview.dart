@@ -10,20 +10,20 @@ class ProjectOverview extends StatelessWidget {
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
 
-        return _buildListView(context, snapshot.data.documents);
+        return buildListView(context, snapshot.data.documents);
       },
     );
   }
 
-  ListView _buildListView(
+  ListView buildListView(
       BuildContext context, List<DocumentSnapshot> snapshot) {
     return ListView(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-      children: snapshot.map((data) => _buildListItem(context, data)).toList(),
+      children: snapshot.map((data) => buildListItem(context, data)).toList(),
     );
   }
 
-  Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
+  Widget buildListItem(BuildContext context, DocumentSnapshot data) {
     final project = Project.fromSnapshot(data);
 
     return Padding(
