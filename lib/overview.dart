@@ -24,6 +24,8 @@ class ProjectOverview extends StatelessWidget {
   }
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
+    final project = Project.fromSnapshot(data);
+
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
       child: InkWell(
@@ -36,12 +38,12 @@ class ProjectOverview extends StatelessWidget {
               fit: StackFit.expand,
               children: <Widget>[
                 Image.network(
-                    'http://pangea-projekt.de/wordpress/wp-content/uploads/2016/10/Deutschkurs_2-1230x820.jpg',
+                    project.picture,
                     fit: BoxFit.cover),
                 Positioned(
                     bottom: 10.0,
                     left: 10.0,
-                    child: Text(data.data['title'],
+                    child: Text(project.title,
                         style: Theme.of(context)
                             .textTheme
                             .title
@@ -53,4 +55,21 @@ class ProjectOverview extends StatelessWidget {
       ),
     );
   }
+}
+
+class Project {
+  final String title;
+  final String address;
+  final String description;
+  final String picture;
+
+  Project.fromMap(Map<String, dynamic> map)
+      :assert(map['title'] != null),
+        title = map['title'],
+        address = map['address'],
+        description = map['description'],
+        picture = map['picture'];
+
+  Project.fromSnapshot(DocumentSnapshot snapshot)
+      : this.fromMap(snapshot.data);
 }
