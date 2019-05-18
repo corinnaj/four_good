@@ -1,58 +1,37 @@
 import 'package:flutter/material.dart';
+import 'overview.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'overview.dart';
+import 'volunteered_screen.dart';
 
 class ProjectDetailView extends StatefulWidget {
-  final DocumentSnapshot projectDocument;
+  final Project project;
 
-  ProjectDetailView({Key key, this.projectDocument}) : super(key: key);
+  const ProjectDetailView({Key key, this.project}) : super(key: key);
 
   @override
   _ProjectDetailViewState createState() => _ProjectDetailViewState();
 }
 
 class _ProjectDetailViewState extends State<ProjectDetailView> {
-  bool ismyproject = false;
-  BuildContext innerContext;
-
-  void _doIt(BuildContext context, DocumentReference projectReference) {
-    setState(() {
-      ismyproject = true;
-    });
-    projectReference.updateData({'ismyproject': true});
-  }
-
-  void _cancelIt(BuildContext context, DocumentReference projectReference) {
-    setState(() {
-      ismyproject = false;
-    });
-    projectReference.updateData({'ismyproject': false});
-  }
-
   @override
   Widget build(BuildContext context) {
-    final project = Project.fromSnapshot(widget.projectDocument);
-    setState(() {
-      ismyproject = widget.projectDocument.data['ismyproject'];
-    });
     return Scaffold(
       appBar: AppBar(
-        title: Text(project.title),
+        title: Text(widget.project.title),
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Image.network(project.picture),
-            if (project.isExternal)
+            Image.network(widget.project.picture),
+            if (widget.project.isExternal)
               Container(
                 decoration: new BoxDecoration(color: Colors.indigoAccent),
-                child: Text(project.website,
+                child: Text(widget.project.website,
                     style: Theme.of(context)
                         .textTheme
                         .title
@@ -62,27 +41,32 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
               padding: const EdgeInsets.all(10.0),
               child: Center(
                   child: Text(
-                project.description,
+                widget.project.description,
                 style: Theme.of(context).textTheme.body1.copyWith(fontSize: 18),
               )),
             ),
-            if (project.time != null)
+            if (widget.project.time != null && widget.project.regularly)
+              Center(
+                  child: Text(DateFormat('kk:mm EEE, ')
+                      .format(widget.project.time) + 'regularly')),
+            if (widget.project.time != null && !widget.project.regularly)
               Center(
                   child: Text(DateFormat('kk:mm EEE, d MMM yyyy')
-                      .format(project.time))),
-            if (project.geoPoint != null)
-              Container(
-                  width: 200, height: 200, child: _buildMap(context, project)),
-            if (ismyproject == null || !ismyproject)
+                      .format(widget.project.time))),
+            if (widget.project.geoPoint != null)
+              Container(width: 200, height: 200, child: _buildMap(context)),
+            if (!widget.project.isExternal)
               Center(
                   child: FlatButton.icon(
                 color: Theme.of(context).primaryColor,
                 textColor: Colors.white,
                 label: Text("Do it 4 Good"),
                 icon: const Icon(FontAwesomeIcons.handHoldingHeart, size: 18.0),
-                onPressed: () {
-                  _doIt(context, widget.projectDocument.reference);
-                },
+                onPressed: () => {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>
+                              VolunteeredScreen(project: widget.project)))
+                    },
                 splashColor: Colors.redAccent,
               ))
             else
@@ -90,21 +74,9 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
                   child: FlatButton.icon(
                 color: Theme.of(context).primaryColor,
                 textColor: Colors.white,
-                label: Text("Can't made it anymore"),
-                icon: const Icon(FontAwesomeIcons.sadTear, size: 18.0),
-                onPressed: () {
-                  _cancelIt(context, widget.projectDocument.reference);
-                },
-                splashColor: Colors.redAccent,
-              )),
-            if (project.isExternal)
-              Center(
-                  child: FlatButton.icon(
-                color: Theme.of(context).primaryColor,
-                textColor: Colors.white,
                 label: Text('Visit external website'),
                 icon: const Icon(FontAwesomeIcons.link, size: 18.0),
-                onPressed: () => {launch(project.source_url)},
+                onPressed: () => {launch(widget.project.source_url)},
                 splashColor: Colors.redAccent,
               ))
           ],
@@ -113,10 +85,11 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
     );
   }
 
-  Widget _buildMap(BuildContext context, Project project) {
+  Widget _buildMap(BuildContext context) {
     return FlutterMap(
         options: new MapOptions(
-          center: LatLng(project.geoPoint.latitude, project.geoPoint.longitude),
+          center: LatLng(widget.project.geoPoint.latitude,
+              widget.project.geoPoint.longitude),
           zoom: 13.0,
         ),
         layers: [
@@ -128,8 +101,8 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
               new Marker(
                 width: 80.0,
                 height: 80.0,
-                point: new LatLng(
-                    project.geoPoint.latitude, project.geoPoint.longitude),
+                point: new LatLng(widget.project.geoPoint.latitude,
+                    widget.project.geoPoint.longitude),
                 builder: (ctx) => new Container(
                       child: const Icon(
                         FontAwesomeIcons.mapMarkerAlt,
