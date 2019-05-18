@@ -10,6 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+			builder: (context, child) => MediaQuery(data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true), child: child),
       title: 'Flutter Demo',
       theme: ThemeData(
           primarySwatch: Colors.indigo, accentColor: Colors.amberAccent),
@@ -40,9 +41,6 @@ class _MyHomePageState extends State<MyHomePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        //appBar: AppBar(
-        //  title: Text('4 Good'),
-        //),
         drawer: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,

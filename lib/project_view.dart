@@ -3,6 +3,8 @@ import 'overview.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:intl/intl.dart';
 
 class ProjectDetailView extends StatefulWidget {
   final Project project;
@@ -42,6 +44,9 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
                 style: Theme.of(context).textTheme.body1.copyWith(fontSize: 18),
               )),
             ),
+            if (widget.project.time != null)
+              Center(child: Text(DateFormat('kk:mm EEE, d MMM yyyy').format(widget.project.time))
+              ),
             if (widget.project.geoPoint != null)
               Container(width: 200, height: 200, child: _buildMap(context)),
             if (!widget.project.isExternal)
@@ -61,7 +66,7 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
                 textColor: Colors.white,
                 label: Text('Visit external website'),
                 icon: const Icon(FontAwesomeIcons.link, size: 18.0),
-                onPressed: () => {},
+                onPressed: () => {launch(widget.project.source_url)},
                 splashColor: Colors.redAccent,
               ))
           ],
