@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 import 'package:share/share.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flushbar/flushbar.dart';
 
 class ProjectDetailView extends StatefulWidget {
   final DocumentSnapshot projectDocument;
@@ -20,6 +21,8 @@ class ProjectDetailView extends StatefulWidget {
 class _ProjectDetailViewState extends State<ProjectDetailView> {
   bool ismyproject = false;
 
+  BuildContext innerContext;
+
   @override
   void initState() {
     super.initState();
@@ -31,6 +34,12 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
       ismyproject = true;
     });
     projectReference.updateData({'ismyproject': true});
+    Flushbar(
+      title: "Thanks for volunteering!",
+      message:
+          "You are assigned to this project. For an overview of your assigned projects visit your profile page.",
+      duration: Duration(seconds: 4),
+    )..show(context);
   }
 
   void _cancelIt(BuildContext context, DocumentReference projectReference) {
@@ -38,6 +47,12 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
       ismyproject = false;
     });
     projectReference.updateData({'ismyproject': false});
+    Flushbar(
+      title: "Too bad it doesn't work for you :(",
+      message:
+          "You are unassigned to this project. We hope to see you again on an other project.",
+      duration: Duration(seconds: 4),
+    )..show(context);
   }
 
   @override
