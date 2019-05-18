@@ -147,7 +147,7 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
                   child: FlatButton.icon(
                 color: Theme.of(context).primaryColor,
                 textColor: Colors.white,
-                label: Text("Can't made it anymore"),
+                label: Text("Can't make it anymore"),
                 icon: const Icon(FontAwesomeIcons.sadTear, size: 18.0),
                 onPressed: () {
                   _cancelIt(context, widget.projectDocument.reference);
