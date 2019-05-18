@@ -55,7 +55,7 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
                         .title
                         .copyWith(color: Colors.white)),
               ),
-            if (widget.project.categories != null)
+            if (project.categories != null)
               Center(
                 child: Padding(
                   padding: const EdgeInsets.all(5.0),
@@ -63,12 +63,12 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
                       spacing: 5.0,
                       runSpacing: 5.0,
                       direction: Axis.horizontal,
-                      children: widget.project.categories
+                      children: project.categories
                           .map((category) => BubbleItem(category, Colors.green))
                           .toList()),
                 ),
               ),
-            if (widget.project.neededSkills != null)
+            if (project.neededSkills != null)
               Center(
                 child: Padding(
                   padding: const EdgeInsets.all(1.0),
@@ -76,7 +76,7 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
                       spacing: 1.0,
                       runSpacing: 1.0,
                       direction: Axis.horizontal,
-                      children: widget.project.neededSkills
+                      children: project.neededSkills
                           .map((neededSkill) =>
                               BubbleItem(neededSkill.documentID, Colors.orange))
                           .toList()),

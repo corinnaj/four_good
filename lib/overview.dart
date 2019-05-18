@@ -85,8 +85,7 @@ class Project {
         website = map['website'],
         source_url = map['source_url'],
         time = map['time'],
-        regularly = map['regularly'],
-        ismyproject = map['ismyproject'];
+        ismyproject = map['ismyproject'],
         regularly = map['regularly'],
         categories = map['categories'],
         neededSkills = map['neededSkills'];
