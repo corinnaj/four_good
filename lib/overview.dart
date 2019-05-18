@@ -34,6 +34,8 @@ class ProjectOverview extends StatelessWidget {
         child: Card(
           child: Container(
             height: 150.0,
+            decoration: new BoxDecoration(
+              border: project.isExternal ? Border.all(color: Colors.blueAccent, width: 4.2) : null),
             child: Stack(
               fit: StackFit.expand,
               children: <Widget>[
@@ -63,6 +65,8 @@ class Project {
   final String description;
   final String picture;
   final GeoPoint geoPoint;
+  final bool isExternal;
+  final String website;
 
   Project.fromMap(Map<String, dynamic> map)
       :assert(map['title'] != null),
@@ -70,7 +74,9 @@ class Project {
         address = map['address'],
         description = map['description'],
         picture = map['picture'],
-        geoPoint = map['place'];
+        geoPoint = map['place'],
+        isExternal = map['isExternal'],
+        website = map['website'];
 
   Project.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data);
