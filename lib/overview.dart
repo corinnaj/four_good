@@ -71,6 +71,8 @@ class Project {
   final DateTime time;
   final bool regularly;
   final bool ismyproject;
+  final List categories;
+  final List neededSkills;
 
   Project.fromMap(Map<String, dynamic> map)
       : assert(map['title'] != null),
@@ -85,6 +87,9 @@ class Project {
         time = map['time'],
         regularly = map['regularly'],
         ismyproject = map['ismyproject'];
+        regularly = map['regularly'],
+        categories = map['categories'],
+        neededSkills = map['neededSkills'];
 
   Project.fromSnapshot(DocumentSnapshot snapshot) : this.fromMap(snapshot.data);
 }
