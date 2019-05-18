@@ -1,24 +1,71 @@
 import 'package:flutter/material.dart';
+import 'overview.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong/latlong.dart';
 
-class ProjectDetailView extends StatelessWidget {
+class ProjectDetailView extends StatefulWidget {
+  final Project project;
+
+  const ProjectDetailView({Key key, this.project}) : super(key: key);
+
+  @override
+  _ProjectDetailViewState createState() => _ProjectDetailViewState();
+}
+
+class _ProjectDetailViewState extends State<ProjectDetailView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Project Title'),
+        title: Text(widget.project.title),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Image.network(
-              'http://pangea-projekt.de/wordpress/wp-content/uploads/2016/10/Deutschkurs_2-1230x820.jpg'),
-          Center(
-            child: RaisedButton(
-              child: Text('Do it 4 Good!'),
-            ),
-          )
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Image.network(widget.project.picture),
+            Center(
+                child: Text(
+              widget.project.description,
+              style: Theme.of(context).textTheme.body1.copyWith(fontSize: 18),
+            )),
+            if (widget.project.geoPoint != null)
+              Container(width: 200, height: 200, child: _buildMap()),
+            Center(
+              child: RaisedButton(
+                child: Text('Do it 4 Good!'),
+              ),
+            )
+          ],
+        ),
       ),
     );
+  }
+
+  Widget _buildMap() {
+    return FlutterMap(
+        options: new MapOptions(
+          center: LatLng(widget.project.geoPoint.latitude,
+              widget.project.geoPoint.longitude),
+          zoom: 13.0,
+        ),
+        layers: [
+          new TileLayerOptions(
+              urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+              subdomains: ['a', 'b', 'c']),
+          new MarkerLayerOptions(
+            markers: [
+              new Marker(
+                width: 80.0,
+                height: 80.0,
+                point: new LatLng(widget.project.geoPoint.latitude,
+                    widget.project.geoPoint.longitude),
+                builder: (ctx) => new Container(
+                      child: new FlutterLogo(),
+                    ),
+              ),
+            ],
+          ),
+        ]);
   }
 }

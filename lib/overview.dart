@@ -30,7 +30,7 @@ class ProjectOverview extends StatelessWidget {
       padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
       child: InkWell(
         onTap: () => Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => ProjectDetailView())),
+            .push(MaterialPageRoute(builder: (context) => ProjectDetailView(project: project))),
         child: Card(
           child: Container(
             height: 150.0,
@@ -62,14 +62,17 @@ class Project {
   final String address;
   final String description;
   final String picture;
+  final GeoPoint geoPoint;
 
   Project.fromMap(Map<String, dynamic> map)
       :assert(map['title'] != null),
         title = map['title'],
         address = map['address'],
         description = map['description'],
-        picture = map['picture'];
+        picture = map['picture'],
+        geoPoint = map['place'];
 
   Project.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data);
+
 }
