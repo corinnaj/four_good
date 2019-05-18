@@ -37,6 +37,33 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
                         .title
                         .copyWith(color: Colors.white)),
               ),
+            if (widget.project.categories != null)
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Wrap(
+                      spacing: 5.0,
+                      runSpacing: 5.0,
+                      direction: Axis.horizontal,
+                      children: widget.project.categories
+                          .map((category) => BubbleItem(category, Colors.green))
+                          .toList()),
+                ),
+              ),
+            if (widget.project.neededSkills != null)
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(1.0),
+                  child: Wrap(
+                      spacing: 1.0,
+                      runSpacing: 1.0,
+                      direction: Axis.horizontal,
+                      children: widget.project.neededSkills
+                          .map((neededSkill) =>
+                              BubbleItem(neededSkill.documentID, Colors.orange))
+                          .toList()),
+                ),
+              ),
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Center(
@@ -47,8 +74,9 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
             ),
             if (widget.project.time != null && widget.project.regularly)
               Center(
-                  child: Text(DateFormat('kk:mm EEE, ')
-                      .format(widget.project.time) + 'regularly')),
+                  child: Text(
+                      DateFormat('kk:mm EEE, ').format(widget.project.time) +
+                          'regularly')),
             if (widget.project.time != null && !widget.project.regularly)
               Center(
                   child: Text(DateFormat('kk:mm EEE, d MMM yyyy')
@@ -114,5 +142,33 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
             ],
           )
         ]);
+  }
+}
+
+class BubbleItem extends StatefulWidget {
+  final String text;
+  final Color bubbleColor;
+
+  const BubbleItem(this.text, this.bubbleColor);
+
+  @override
+  _BubbleItemState createState() => _BubbleItemState();
+}
+
+class _BubbleItemState extends State<BubbleItem> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          color: widget.bubbleColor, borderRadius: BorderRadius.circular(15.0)),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(widget.text,
+            style: Theme.of(context)
+                .textTheme
+                .body1
+                .copyWith(color: Colors.white)),
+      ),
+    );
   }
 }
