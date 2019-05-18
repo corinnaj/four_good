@@ -29,19 +29,19 @@ class ProjectOverview extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
       child: InkWell(
-        onTap: () => Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => ProjectDetailView(project: project))),
+        onTap: () => Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ProjectDetailView(projectDocument: data))),
         child: Card(
           child: Container(
             height: 150.0,
             decoration: new BoxDecoration(
-              border: project.isExternal ? Border.all(color: Colors.blueAccent, width: 4.2) : null),
+                border: project.isExternal
+                    ? Border.all(color: Colors.blueAccent, width: 4.2)
+                    : null),
             child: Stack(
               fit: StackFit.expand,
               children: <Widget>[
-                Image.network(
-                    project.picture,
-                    fit: BoxFit.cover),
+                Image.network(project.picture, fit: BoxFit.cover),
                 Positioned(
                     bottom: 10.0,
                     left: 10.0,
@@ -70,9 +70,10 @@ class Project {
   final String source_url;
   final DateTime time;
   final bool regularly;
+  final bool ismyproject;
 
   Project.fromMap(Map<String, dynamic> map)
-      :assert(map['title'] != null),
+      : assert(map['title'] != null),
         title = map['title'],
         address = map['address'],
         description = map['description'],
@@ -82,10 +83,8 @@ class Project {
         website = map['website'],
         source_url = map['source_url'],
         time = map['time'],
-        regularly = map['regularly'];
+        regularly = map['regularly'],
+        ismyproject = map['ismyproject'];
 
-
-  Project.fromSnapshot(DocumentSnapshot snapshot)
-      : this.fromMap(snapshot.data);
-
+  Project.fromSnapshot(DocumentSnapshot snapshot) : this.fromMap(snapshot.data);
 }
