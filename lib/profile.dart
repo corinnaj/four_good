@@ -45,7 +45,7 @@ class ProfileScreen extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text('Honor', style: Theme.of(context).textTheme.title),
+              child: Text('Achievements', style: Theme.of(context).textTheme.title),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -54,7 +54,7 @@ class ProfileScreen extends StatelessWidget {
                   runSpacing: 5.0,
                   direction: Axis.horizontal,
                   children: ['Coding-Ninja', 'Leader']
-                      .map((honor) => BubbleItem(honor, Colors.blueGrey))
+                      .map((achievement) => BubbleItem(achievement, Colors.blueGrey))
                       .toList()),
             ),
             //Slider(min: 0, value: 5, max: 10),
