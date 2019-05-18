@@ -19,22 +19,78 @@ class ProjectDetailView extends StatefulWidget {
 
 class _ProjectDetailViewState extends State<ProjectDetailView> {
   Widget _buildDate(Project project) {
-    return project.time != null
-        ? Row(children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
-              child: Icon(
-                Icons.calendar_today,
-                size: 30.0,
-              ),
-            ),
-            Text(
-              DateFormat('EEE, d MMM yyyy kk:mm').format(project.time),
-              style: Theme.of(context).textTheme.title,
-            )
-          ])
-        : Container();
-	}
+        return Column(
+          children: <Widget>[
+            Row(children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Icon(
+                    Icons.calendar_today,
+                    size: 30.0,
+                  ),
+                ),
+                Text(
+                  !project.regularly ? DateFormat('EEE, d MMM yyyy kk:mm').format(project.time) : 'Every ' + DateFormat('EEE kk:mm').format(project.time),
+                  style: Theme.of(context).textTheme.title,
+                )
+              ]),
+						SizedBox(height: 12.0,),
+          ],
+        );
+  }
+
+  Widget _buildCategories(Project project) {
+    return Column(children: <Widget>[
+      Center(
+        child: Wrap(
+            spacing: 8.0,
+            runSpacing: 8.0,
+            direction: Axis.horizontal,
+            children: project.categories
+                .map((category) => BubbleItem(category, Colors.green))
+                .toList()),
+      ),
+      SizedBox(height: 16.0),
+    ]);
+  }
+
+  Widget _buildSkills(Project project) {
+    return Column(children: <Widget>[
+      Center(
+        child: Padding(
+          padding: const EdgeInsets.all(1.0),
+          child: Wrap(
+              spacing: 1.0,
+              runSpacing: 1.0,
+              direction: Axis.horizontal,
+              children: project.neededSkills
+                  .map((neededSkill) =>
+                      BubbleItem(neededSkill.documentID, Colors.orange))
+                  .toList()),
+        ),
+      ),
+      SizedBox(
+        height: 16.0,
+      )
+    ]);
+  }
+
+  Widget _buildExternalHeader(Project project) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 24.0, right: 24.0, bottom: 12.0),
+      child: Container(
+        decoration: new BoxDecoration(color: Colors.indigoAccent[200]),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text('This project was provided by ' +
+				project.website,
+              textAlign: TextAlign.center,
+              style:
+                  Theme.of(context).textTheme.title.copyWith(color: Colors.white)),
+        ),
+      ),
+    );
+  }
 
   bool ismyproject = false;
 
@@ -78,43 +134,13 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Image.network(project.picture),
-            _buildDate(project),
-            if (project.isExternal)
-              Container(
-                decoration: new BoxDecoration(color: Colors.indigoAccent),
-                child: Text(project.website,
-                    style: Theme.of(context)
-                        .textTheme
-                        .title
-                        .copyWith(color: Colors.white)),
-              ),
-            if (project.categories != null)
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Wrap(
-                      spacing: 5.0,
-                      runSpacing: 5.0,
-                      direction: Axis.horizontal,
-                      children: project.categories
-                          .map((category) => BubbleItem(category, Colors.green))
-                          .toList()),
-                ),
-              ),
-            if (project.neededSkills != null)
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(1.0),
-                  child: Wrap(
-                      spacing: 1.0,
-                      runSpacing: 1.0,
-                      direction: Axis.horizontal,
-                      children: project.neededSkills
-                          .map((neededSkill) =>
-                              BubbleItem(neededSkill.documentID, Colors.orange))
-                          .toList()),
-                ),
-              ),
+            SizedBox(height: 16.0),
+            project.time != null ? _buildDate(project) : Container(),
+            project.isExternal ? _buildExternalHeader(project) : Container(),
+            project.categories != null
+                ? _buildCategories(project)
+                : Container(),
+            project.neededSkills != null ? _buildSkills(project) : Container(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Center(
@@ -125,12 +151,9 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
             ),
             SizedBox(height: 12.0),
             if (project.geoPoint != null)
-              Container(width: 200, height: 200, child: _buildMap(context, project)),
-            if (project.time != null && project.regularly)
-              Center(
-                  child: Text(DateFormat('kk:mm EEE, ').format(project.time) +
-                      'regularly')),
-            if (!ismyproject)
+              Container(
+                  width: 200, height: 200, child: _buildMap(context, project)),
+            if (ismyproject == null || !ismyproject)
               Center(
                   child: FlatButton.icon(
                 color: Theme.of(context).primaryColor,
