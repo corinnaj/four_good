@@ -48,7 +48,7 @@ class ProfileScreen extends StatelessWidget {
 							child: Text('Skills',
 								style: Theme.of(context).textTheme.title),
 						),
-            Slider(min: 0, value: 5, max: 10)
+            Slider(min: 0, value: 5, max: 10, onChanged: (_) {})
           ],
         ),
       ),

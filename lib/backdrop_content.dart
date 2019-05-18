@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:four_good/date_time_picker.dart';
+import 'package:four_good/filter_options.dart';
 
 class FilterItem extends StatefulWidget {
   final String text;
@@ -42,6 +45,12 @@ class _FilterItemState extends State<FilterItem> {
 }
 
 class BackdropContent extends StatefulWidget {
+
+	//final StreamSink optionsSink;
+
+	//BackdropContent(this.optionsSink);
+	BackdropContent();
+
   @override
   _BackdropContentState createState() => _BackdropContentState();
 }
@@ -155,6 +164,7 @@ class _BackdropContentState extends State<BackdropContent> {
                     hintText: 'Filter by key words...',
                     prefixIcon: Icon(Icons.search),
                     border: InputBorder.none),
+										//onChanged: (text) => widget.optionsSink.add(MyFilterOptions(text)),
               ),
               SizedBox(
                 height: 16.0,

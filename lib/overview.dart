@@ -1,13 +1,43 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:four_good/filter_options.dart';
 import 'package:four_good/project_view.dart';
+import 'package:rxdart/rxdart.dart';
 
-class ProjectOverview extends StatelessWidget {
+class ProjectOverview extends StatefulWidget {
+	//final Observable<MyFilterOptions> optionStream;
+
+	//ProjectOverview(this.optionStream);
+	ProjectOverview();
+
+  @override
+  _ProjectOverviewState createState() => _ProjectOverviewState();
+}
+
+class _ProjectOverviewState extends State<ProjectOverview> {
+	Stream<QuerySnapshot> answerStream;
+
+	@override
+  void initState() {
+    super.initState();
+
+//		answerStream = widget.optionStream.flatMap((options) {
+//			print('asdfasdfasdf');
+//		  return Firestore.instance
+//			.collection('Projects')
+//			//.where('isExternal', isEqualTo: false)
+//			//.where('terms', arrayContains: options.keyWords)
+//			.snapshots();
+//		});
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('Projects').snapshots(),
+      //stream: answerStream,
+			stream: Firestore.instance.collection('Projects').snapshots(),
       builder: (context, snapshot) {
+      	print(snapshot);
         if (!snapshot.hasData) return LinearProgressIndicator();
 
         return _buildListView(context, snapshot.data.documents);

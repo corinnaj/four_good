@@ -16,6 +16,24 @@ class ProjectDetailView extends StatefulWidget {
 }
 
 class _ProjectDetailViewState extends State<ProjectDetailView> {
+  Widget _buildDate() {
+    return widget.project.time != null
+        ? Row(children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+              child: Icon(
+                Icons.calendar_today,
+                size: 30.0,
+              ),
+            ),
+            Text(
+              DateFormat('EEE, d MMM yyyy kk:mm').format(widget.project.time),
+              style: Theme.of(context).textTheme.title,
+            )
+          ])
+        : Container();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,6 +45,7 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Image.network(widget.project.picture),
+            _buildDate(),
             if (widget.project.isExternal)
               Container(
                 decoration: new BoxDecoration(color: Colors.indigoAccent),
@@ -37,16 +56,14 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
                         .copyWith(color: Colors.white)),
               ),
             Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Center(
                   child: Text(
-                widget.project.description,
-                style: Theme.of(context).textTheme.body1.copyWith(fontSize: 18),
+                widget.project.description.replaceAll('\\n', '\n\n'),
+                style: Theme.of(context).textTheme.body1.copyWith(fontSize: 14),
               )),
             ),
-            if (widget.project.time != null)
-              Center(child: Text(DateFormat('kk:mm EEE, d MMM yyyy').format(widget.project.time))
-              ),
+            SizedBox(height: 12.0),
             if (widget.project.geoPoint != null)
               Container(width: 200, height: 200, child: _buildMap(context)),
             if (!widget.project.isExternal)
