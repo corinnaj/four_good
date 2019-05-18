@@ -68,6 +68,8 @@ class Project {
   final bool isExternal;
   final String website;
   final String source_url;
+  final DateTime time;
+  final bool regularly;
 
   Project.fromMap(Map<String, dynamic> map)
       :assert(map['title'] != null),
@@ -78,7 +80,10 @@ class Project {
         geoPoint = map['place'],
         isExternal = map['isExternal'],
         website = map['website'],
-        source_url = map['source_url'];
+        source_url = map['source_url'],
+        time = map['time'],
+        regularly = map['regularly'];
+
 
   Project.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data);
