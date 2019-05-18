@@ -142,6 +142,7 @@ Widget _buildFields(BuildContext context, List<DocumentSnapshot> snapshots) {
 }
 
 class MyProjectOverview extends ProjectOverview {
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(

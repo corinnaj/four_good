@@ -26,17 +26,19 @@ class _FrontLayer extends StatelessWidget {
 		Key key,
 		this.onTap,
 		this.child,
+		this.headerChild,
 	}) : super(key: key);
 
 	final VoidCallback onTap;
 	final Widget child;
+	final Widget headerChild;
 
 	@override
 	Widget build(BuildContext context) {
 		return Material(
 			elevation: 16.0,
-			shape: const BeveledRectangleBorder(
-				borderRadius: BorderRadius.only(topLeft: Radius.circular(46.0)),
+			shape: const RoundedRectangleBorder(
+				borderRadius: BorderRadius.only(topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0)),
 			),
 			child: Column(
 				crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -45,8 +47,18 @@ class _FrontLayer extends StatelessWidget {
 						behavior: HitTestBehavior.opaque,
 						onTap: onTap,
 						child: Container(
-							height: 40.0,
+							height: 45.0,
 							alignment: AlignmentDirectional.centerStart,
+							child: Center(
+							  child: Row(
+							    children: <Widget>[
+							    	SizedBox(width: 50.0),
+							      headerChild,
+							      //Opacity(
+										//	child: Text('x Projects found', style: Theme.of(context).textTheme.title.copyWith(color: Colors.black54),)),
+							    ],
+							  ),
+							),
 						),
 					),
 					Expanded(
@@ -146,6 +158,7 @@ class Backdrop extends StatefulWidget {
 		@required this.frontTitle,
 		@required this.backTitle,
 		@required this.controller,
+		@required this.underHeaderTitle,
 	}) : assert(frontLayer != null),
 			assert(backLayer != null),
 			assert(frontTitle != null),
@@ -156,6 +169,7 @@ class Backdrop extends StatefulWidget {
 	final Widget backLayer;
 	final Widget frontTitle;
 	final Widget backTitle;
+	final String underHeaderTitle;
 	final AnimationController controller;
 
 	@override
@@ -270,6 +284,11 @@ class _BackdropState extends State<Backdrop> with SingleTickerProviderStateMixin
 					child: _FrontLayer(
 						onTap: _toggleBackdropLayerVisibility,
 						child: widget.frontLayer,
+						headerChild: Opacity(
+							opacity: _frontLayerVisible ? 0.0 : 1.0,
+							child: Text(
+								widget.underHeaderTitle,
+								style: Theme.of(context).textTheme.title.copyWith(color: Colors.black87),))
 					),
 				),
 			],

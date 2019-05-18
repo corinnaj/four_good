@@ -23,6 +23,7 @@ dependencies:
   cloud_firestore: ^0.8.2
   flutter_map: any
   font_awesome_flutter: any
+  rxdart:
   share: any
   flushbar: any
 

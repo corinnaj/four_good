@@ -42,6 +42,12 @@ class _FilterItemState extends State<FilterItem> {
 }
 
 class BackdropContent extends StatefulWidget {
+
+	//final StreamSink optionsSink;
+
+	//BackdropContent(this.optionsSink);
+	BackdropContent();
+
   @override
   _BackdropContentState createState() => _BackdropContentState();
 }
@@ -155,6 +161,7 @@ class _BackdropContentState extends State<BackdropContent> {
                     hintText: 'Filter by key words...',
                     prefixIcon: Icon(Icons.search),
                     border: InputBorder.none),
+										//onChanged: (text) => widget.optionsSink.add(MyFilterOptions(text)),
               ),
               SizedBox(
                 height: 16.0,

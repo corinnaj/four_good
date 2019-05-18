@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:four_good/project_view.dart';
 
 class ProjectOverview extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('Projects').snapshots(),
+      //stream: answerStream,
+			stream: Firestore.instance.collection('Projects').snapshots(),
       builder: (context, snapshot) {
+      	print(snapshot);
         if (!snapshot.hasData) return LinearProgressIndicator();
 
         return buildListView(context, snapshot.data.documents);
