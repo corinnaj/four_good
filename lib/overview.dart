@@ -1,35 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:four_good/filter_options.dart';
 import 'package:four_good/project_view.dart';
-import 'package:rxdart/rxdart.dart';
 
-class ProjectOverview extends StatefulWidget {
-	//final Observable<MyFilterOptions> optionStream;
-
-	//ProjectOverview(this.optionStream);
-	ProjectOverview();
-
-  @override
-  _ProjectOverviewState createState() => _ProjectOverviewState();
-}
-
-class _ProjectOverviewState extends State<ProjectOverview> {
-	Stream<QuerySnapshot> answerStream;
-
-	@override
-  void initState() {
-    super.initState();
-
-//		answerStream = widget.optionStream.flatMap((options) {
-//			print('asdfasdfasdf');
-//		  return Firestore.instance
-//			.collection('Projects')
-//			//.where('isExternal', isEqualTo: false)
-//			//.where('terms', arrayContains: options.keyWords)
-//			.snapshots();
-//		});
-  }
+class ProjectOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -40,38 +13,38 @@ class _ProjectOverviewState extends State<ProjectOverview> {
       	print(snapshot);
         if (!snapshot.hasData) return LinearProgressIndicator();
 
-        return _buildListView(context, snapshot.data.documents);
+        return buildListView(context, snapshot.data.documents);
       },
     );
   }
 
-  ListView _buildListView(
+  ListView buildListView(
       BuildContext context, List<DocumentSnapshot> snapshot) {
     return ListView(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-      children: snapshot.map((data) => _buildListItem(context, data)).toList(),
+      children: snapshot.map((data) => buildListItem(context, data)).toList(),
     );
   }
 
-  Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
+  Widget buildListItem(BuildContext context, DocumentSnapshot data) {
     final project = Project.fromSnapshot(data);
 
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
       child: InkWell(
-        onTap: () => Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => ProjectDetailView(project: project))),
+        onTap: () => Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ProjectDetailView(projectDocument: data))),
         child: Card(
           child: Container(
             height: 150.0,
             decoration: new BoxDecoration(
-              border: project.isExternal ? Border.all(color: Colors.blueAccent, width: 4.2) : null),
+                border: project.isExternal
+                    ? Border.all(color: Colors.blueAccent, width: 4.2)
+                    : null),
             child: Stack(
               fit: StackFit.expand,
               children: <Widget>[
-                Image.network(
-                    project.picture,
-                    fit: BoxFit.cover),
+                Image.network(project.picture, fit: BoxFit.cover),
                 Positioned(
                     bottom: 10.0,
                     left: 10.0,
@@ -100,9 +73,12 @@ class Project {
   final String source_url;
   final DateTime time;
   final bool regularly;
+  final bool ismyproject;
+  final List categories;
+  final List neededSkills;
 
   Project.fromMap(Map<String, dynamic> map)
-      :assert(map['title'] != null),
+      : assert(map['title'] != null),
         title = map['title'],
         address = map['address'],
         description = map['description'],
@@ -112,10 +88,10 @@ class Project {
         website = map['website'],
         source_url = map['source_url'],
         time = map['time'],
-        regularly = map['regularly'];
+        ismyproject = map['ismyproject'],
+        regularly = map['regularly'],
+        categories = map['categories'],
+        neededSkills = map['neededSkills'];
 
-
-  Project.fromSnapshot(DocumentSnapshot snapshot)
-      : this.fromMap(snapshot.data);
-
+  Project.fromSnapshot(DocumentSnapshot snapshot) : this.fromMap(snapshot.data);
 }

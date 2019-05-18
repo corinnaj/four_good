@@ -1,9 +1,6 @@
-import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:four_good/date_time_picker.dart';
-import 'package:four_good/filter_options.dart';
 
 class FilterItem extends StatefulWidget {
   final String text;
