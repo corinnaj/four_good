@@ -27,38 +27,43 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
             Image.network(widget.project.picture),
             if (widget.project.isExternal)
               Container(
-                decoration: new BoxDecoration(
-                    color: Colors.indigoAccent
-                ),
+                decoration: new BoxDecoration(color: Colors.indigoAccent),
                 child: Text(widget.project.website,
                     style: Theme.of(context)
                         .textTheme
                         .title
                         .copyWith(color: Colors.white)),
               ),
-            Center(
-                child: Text(
-              widget.project.description,
-              style: Theme.of(context).textTheme.body1.copyWith(fontSize: 18),
-            )),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Center(
+                  child: Text(
+                widget.project.description,
+                style: Theme.of(context).textTheme.body1.copyWith(fontSize: 18),
+              )),
+            ),
             if (widget.project.geoPoint != null)
-              Container(width: 200, height: 200, child: _buildMap()),
+              Container(width: 200, height: 200, child: _buildMap(context)),
             if (!widget.project.isExternal)
-            Center(
-              child: FlatButton.icon(
+              Center(
+                  child: FlatButton.icon(
                 color: Theme.of(context).primaryColor,
                 textColor: Colors.white,
                 label: Text("Do it 4 Good"),
                 icon: const Icon(FontAwesomeIcons.handHoldingHeart, size: 18.0),
                 onPressed: () => {},
                 splashColor: Colors.redAccent,
-            ))
-            else Center(
-              child: RaisedButton(
-                onPressed: () {},
-                child: Text('Visit external website'),
-              ),
-            ),
+              ))
+            else
+              Center(
+                  child: FlatButton.icon(
+                color: Theme.of(context).primaryColor,
+                textColor: Colors.white,
+                label: Text('Visit external website'),
+                icon: const Icon(FontAwesomeIcons.link, size: 18.0),
+                onPressed: () => {},
+                splashColor: Colors.redAccent,
+              ))
           ],
         ),
       ),
