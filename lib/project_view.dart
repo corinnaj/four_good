@@ -5,7 +5,7 @@ import 'package:latlong/latlong.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
-import 'volunteered_screen.dart';
+import 'package:share/share.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProjectDetailView extends StatefulWidget {
@@ -46,6 +46,14 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
     return Scaffold(
       appBar: AppBar(
         title: Text(project.title),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.share),
+            onPressed: () {
+              Share.share('check out my website https://example.com');
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -98,9 +106,8 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
             ),
             if (project.time != null && project.regularly)
               Center(
-                  child: Text(
-                      DateFormat('kk:mm EEE, ').format(project.time) +
-                          'regularly')),
+                  child: Text(DateFormat('kk:mm EEE, ').format(project.time) +
+                      'regularly')),
             if (project.time != null && !project.regularly)
               Center(
                   child: Text(DateFormat('kk:mm EEE, d MMM yyyy')
