@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'package:flutter/material.dart';
+import 'package:four_good/profile.dart';
 import 'package:meta/meta.dart';
 
 const Cubic _kAccelerateCurve = Cubic(0.548, 0.0, 0.757, 0.464);
@@ -91,7 +92,7 @@ class _BackdropTitle extends AnimatedWidget {
 						padding: const EdgeInsets.only(right: 8.0),
 						onPressed: onPress,
 						icon: Stack(children: <Widget>[
-								const Icon(Icons.menu)
+								const Icon(Icons.tune)
 						]),
 					),
 				),
@@ -287,26 +288,17 @@ class _BackdropState extends State<Backdrop> with SingleTickerProviderStateMixin
 				frontTitle: widget.frontTitle,
 				backTitle: widget.backTitle,
 			),
-			//actions: <Widget>[
-			//	IconButton(
-			//		icon: const Icon(Icons.search, semanticLabel: 'login'),
-			//		onPressed: () {
-			//			Navigator.push<void>(
-			//				context,
-			//				MaterialPageRoute<void>(builder: (BuildContext context) => LoginPage()),
-			//			);
-			//		},
-			//	),
-			//	IconButton(
-			//		icon: const Icon(Icons.tune, semanticLabel: 'login'),
-			//		onPressed: () {
-			//			Navigator.push<void>(
-			//				context,
-			//				MaterialPageRoute<void>(builder: (BuildContext context) => LoginPage()),
-			//			);
-			//		},
-			//	),
-			//],
+			actions: <Widget>[
+				IconButton(
+					icon: const Icon(Icons.person, semanticLabel: 'login'),
+					onPressed: () {
+						Navigator.push<void>(
+							context,
+							MaterialPageRoute<void>(builder: (BuildContext context) => ProfileScreen()),
+						);
+					},
+				),
+			]
 		);
 		return Scaffold(
 			appBar: appBar,
