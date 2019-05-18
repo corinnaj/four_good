@@ -20,6 +20,12 @@ class ProjectDetailView extends StatefulWidget {
 class _ProjectDetailViewState extends State<ProjectDetailView> {
   bool ismyproject = false;
 
+  @override
+  void initState() {
+    super.initState();
+    ismyproject = widget.projectDocument.data['ismyproject'];
+  }
+
   void _doIt(BuildContext context, DocumentReference projectReference) {
     setState(() {
       ismyproject = true;
@@ -102,7 +108,7 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
             if (project.geoPoint != null)
               Container(
                   width: 200, height: 200, child: _buildMap(context, project)),
-            if (project.ismyproject == null || !project.ismyproject)
+            if (!ismyproject)
               Center(
                   child: FlatButton.icon(
                 color: Theme.of(context).primaryColor,
