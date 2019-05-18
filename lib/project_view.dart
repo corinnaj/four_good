@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'overview.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ProjectDetailView extends StatefulWidget {
   final Project project;
@@ -26,42 +27,50 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
             Image.network(widget.project.picture),
             if (widget.project.isExternal)
               Container(
-                decoration: new BoxDecoration(
-                  color: Colors.indigoAccent
-                ),
+                decoration: new BoxDecoration(color: Colors.indigoAccent),
                 child: Text(widget.project.website,
-                  style: Theme.of(context)
-                    .textTheme
-                    .title
-                    .copyWith(color: Colors.white)),
+                    style: Theme.of(context)
+                        .textTheme
+                        .title
+                        .copyWith(color: Colors.white)),
               ),
-            Center(
-                child: Text(
-              widget.project.description,
-              style: Theme.of(context).textTheme.body1.copyWith(fontSize: 18),
-            )),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Center(
+                  child: Text(
+                widget.project.description,
+                style: Theme.of(context).textTheme.body1.copyWith(fontSize: 18),
+              )),
+            ),
             if (widget.project.geoPoint != null)
-              Container(width: 200, height: 200, child: _buildMap()),
-            if (widget.project.isExternal)
-              Center(
-                child: RaisedButton(
-                  onPressed: () {},
-                  child: Text('Visit external website'),
-                ),
-              ),
+              Container(width: 200, height: 200, child: _buildMap(context)),
             if (!widget.project.isExternal)
               Center(
-                child: RaisedButton(
-                  child: Text('Do it 4 Good!'),
-                ),
-              )
+                  child: FlatButton.icon(
+                color: Theme.of(context).primaryColor,
+                textColor: Colors.white,
+                label: Text("Do it 4 Good"),
+                icon: const Icon(FontAwesomeIcons.handHoldingHeart, size: 18.0),
+                onPressed: () => {},
+                splashColor: Colors.redAccent,
+              ))
+            else
+              Center(
+                  child: FlatButton.icon(
+                color: Theme.of(context).primaryColor,
+                textColor: Colors.white,
+                label: Text('Visit external website'),
+                icon: const Icon(FontAwesomeIcons.link, size: 18.0),
+                onPressed: () => {},
+                splashColor: Colors.redAccent,
+              ))
           ],
         ),
       ),
     );
   }
 
-  Widget _buildMap() {
+  Widget _buildMap(BuildContext context) {
     return FlutterMap(
         options: new MapOptions(
           center: LatLng(widget.project.geoPoint.latitude,
@@ -80,11 +89,15 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
                 point: new LatLng(widget.project.geoPoint.latitude,
                     widget.project.geoPoint.longitude),
                 builder: (ctx) => new Container(
-                      child: new FlutterLogo(),
+                      child: const Icon(
+                        FontAwesomeIcons.mapMarkerAlt,
+                        size: 50.0,
+                        color: Colors.black,
+                      ),
                     ),
               ),
             ],
-          ),
+          )
         ]);
   }
 }
