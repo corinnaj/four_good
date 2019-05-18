@@ -3,6 +3,7 @@ import 'overview.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProjectDetailView extends StatefulWidget {
   final Project project;
@@ -61,7 +62,7 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
                 textColor: Colors.white,
                 label: Text('Visit external website'),
                 icon: const Icon(FontAwesomeIcons.link, size: 18.0),
-                onPressed: () => {},
+                onPressed: () => {launch(widget.project.source_url)},
                 splashColor: Colors.redAccent,
               ))
           ],
