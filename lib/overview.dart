@@ -29,7 +29,8 @@ class ProjectOverview extends StatelessWidget {
     final project = Project.fromSnapshot(data);
 
     if (data.data['visibility'] != true ||
-        data.data['commitVisibility'] != true) return Container();
+        data.data['commitVisibility'] != true ||
+        data.data['distanceVisibility'] != true) return Container();
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
       child: InkWell(
