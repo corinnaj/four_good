@@ -7,7 +7,12 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('My Profile')),
+      appBar: AppBar(
+				title: Text('My Profile'),
+				actions: <Widget>[
+					IconButton(icon: Icon(Icons.edit), onPressed: () {},)
+				],
+			),
       body: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.max,
@@ -63,9 +68,7 @@ class ProfileScreen extends StatelessWidget {
               child: Text('My Projects:',
                   style: Theme.of(context).textTheme.title),
             ),
-            Container(
-                height: 1000, // Dummy Value
-                child: MyProjectOverview()),
+						MyProjectOverview(),
           ],
         ),
       ),
