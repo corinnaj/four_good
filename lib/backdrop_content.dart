@@ -147,7 +147,7 @@ class _BackdropContentState extends State<BackdropContent> {
   }
 
   void _setKeyword(keyword) {
-    Firestore.instance.collection('Projects').snapshots().listen((snapshot) {
+    Firestore.instance.collection('Projects').getDocuments().then((snapshot) {
       snapshot.documents.forEach((doc) {
         if (doc.data['title'].contains(keyword))
           doc.reference.updateData({'visibility': true});
@@ -174,7 +174,7 @@ class _BackdropContentState extends State<BackdropContent> {
                     hintText: 'Filter by key words...',
                     prefixIcon: Icon(Icons.search),
                     border: InputBorder.none),
-                onChanged: (text) => _setKeyword(text),
+                onSubmitted: (text) => _setKeyword(text),
               ),
               SizedBox(
                 height: 16.0,

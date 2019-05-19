@@ -29,7 +29,7 @@ class ProjectOverview extends StatelessWidget {
   Widget buildListItem(BuildContext context, DocumentSnapshot data) {
     final project = Project.fromSnapshot(data);
 
-    if (project.visibility != true) return Container();
+    if (data.data['visibility'] != true) return Container();
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
       child: InkWell(
