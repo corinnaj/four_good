@@ -64,10 +64,9 @@ class ProjectOverview extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                              (project.time
+                              (_getDayTextFor(project.time
                                   .difference(DateTime.now())
-                                  .inDays
-                                  .toString()),
+                                  .inDays)),
                               style: Theme.of(context)
                                   .textTheme
                                   .title
@@ -80,6 +79,13 @@ class ProjectOverview extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _getDayTextFor(int days){
+    if (days == 0)
+      return 'today';
+    else
+      return 'in ' + days.toString() + ' days';
   }
 }
 
