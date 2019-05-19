@@ -152,7 +152,6 @@ class MyProjectOverview extends ProjectOverview {
       stream: Firestore.instance
           .collection('Projects')
           .where("ismyproject", isEqualTo: true)
-          .orderBy("time")
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
