@@ -49,13 +49,26 @@ class ProjectOverview extends StatelessWidget {
               children: <Widget>[
                 Image.network(project.picture, fit: BoxFit.cover),
                 Positioned(
-                    bottom: 10.0,
-                    left: 10.0,
+									bottom: 5.0,
+									left: 5.0,
+									child: Container(
+										width: MediaQuery.of(context).size.width - 100.0,
+										height: project.title.length > 30 ? 55.0 : 30.0,
+										color: Colors.black.withOpacity(0.25),
+									),
+								),
+                Positioned(
+                  bottom: 10.0,
+                  left: 10.0,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width - 100.0,
                     child: Text(project.title,
-                        style: Theme.of(context)
-                            .textTheme
-                            .title
-                            .copyWith(color: Colors.white))),
+                          style: Theme.of(context)
+                              .textTheme
+                              .title
+                              .copyWith(color: Colors.white)),
+                  ),
+                ),
                 if (project.time != null)
                   Positioned(
                       top: 10.0,
