@@ -14,6 +14,20 @@ class ProfileScreen extends StatelessWidget {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
+              child: new Container(
+                  width: 130.0,
+                  height: 130.0,
+                  decoration: new BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: new DecorationImage(
+                          fit: BoxFit.fill,
+                          image: new NetworkImage(
+                              "https://v2media-711f.kxcdn.com/wp-content/uploads/2016/06/HASSO-PLATTNER.jpg")
+                      )
+                  )),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
               child: Text('Personal Information',
                   style: Theme.of(context).textTheme.title),
             ),
@@ -28,6 +42,20 @@ class ProfileScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: MySkillsView(context),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Achievements', style: Theme.of(context).textTheme.title),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Wrap(
+                  spacing: 5.0,
+                  runSpacing: 5.0,
+                  direction: Axis.horizontal,
+                  children: ['Coding-Ninja', 'Leader']
+                      .map((achievement) => BubbleItem(achievement, Colors.blueGrey))
+                      .toList()),
             ),
             //Slider(min: 0, value: 5, max: 10),
             Padding(
@@ -75,7 +103,8 @@ Widget _buildSkills(BuildContext context, List<DocumentSnapshot> snapshots) {
           spacing: 5.0,
           runSpacing: 5.0,
           direction: Axis.horizontal,
-          children: Profile.fromSnapshot(snapshots[0]).skills
+          children: Profile.fromSnapshot(snapshots[0])
+              .skills
               .map((skill) => BubbleItem(skill.documentID, Colors.orange))
               .toList()),
     ),
@@ -113,6 +142,7 @@ Widget _buildFields(BuildContext context, List<DocumentSnapshot> snapshots) {
 }
 
 class MyProjectOverview extends ProjectOverview {
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(

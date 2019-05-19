@@ -23,7 +23,21 @@ class _FilterItemState extends State<FilterItem> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => setState(() => isSelected = !isSelected),
+      onTap: () => setState(() {
+            isSelected = !isSelected;
+            Firestore.instance
+                .collection('Projects')
+                .getDocuments()
+                .then((snapshot) {
+              snapshot.documents.forEach((doc) {
+                if (doc.data['skills'] != null &&
+                    doc.data['skills'].contains(widget.text))
+                  doc.reference.updateData({'visibility': true});
+                else
+                  doc.reference.updateData({'visibility': false});
+              });
+            });
+          }),
       child: Container(
         decoration: BoxDecoration(
             color: isSelected ? Colors.blue : Colors.white,
@@ -42,12 +56,19 @@ class _FilterItemState extends State<FilterItem> {
 }
 
 class BackdropContent extends StatefulWidget {
+  //final StreamSink optionsSink;
+
+  //BackdropContent(this.optionsSink);
+  BackdropContent();
+
   @override
   _BackdropContentState createState() => _BackdropContentState();
 }
 
 class _BackdropContentState extends State<BackdropContent> {
   int radioValue;
+
+  double _sliderValue = 50.0;
 
   @override
   void initState() {
@@ -59,6 +80,33 @@ class _BackdropContentState extends State<BackdropContent> {
     setState(() {
       radioValue = value;
     });
+    if (value == 0) {
+      Firestore.instance.collection('Projects').getDocuments().then((snapshot) {
+        snapshot.documents.forEach((doc) {
+          if (doc.data['regularly'] == true)
+            doc.reference.updateData({'commitVisibility': true});
+          else
+            doc.reference.updateData({'commitVisibility': false});
+        });
+      });
+    }
+    if (value == 1) {
+      Firestore.instance.collection('Projects').getDocuments().then((snapshot) {
+        snapshot.documents.forEach((doc) {
+          if (doc.data['regularly'] == false)
+            doc.reference.updateData({'commitVisibility': true});
+          else
+            doc.reference.updateData({'commitVisibility': false});
+        });
+      });
+    }
+    if (value == 2) {
+      Firestore.instance.collection('Projects').getDocuments().then((snapshot) {
+        snapshot.documents.forEach((doc) {
+            doc.reference.updateData({'commitVisibility': true});
+        });
+      });
+    }
   }
 
   Widget _buildSkillsView(
@@ -75,9 +123,9 @@ class _BackdropContentState extends State<BackdropContent> {
   }
 
   Widget _buildRadioButtons() {
-  	TextStyle style = TextStyle(color: Colors.white);
+    TextStyle style = TextStyle(color: Colors.white);
     return Theme(
-			data: ThemeData(brightness: Brightness.dark),
+      data: ThemeData(brightness: Brightness.dark),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -88,7 +136,10 @@ class _BackdropContentState extends State<BackdropContent> {
                 groupValue: radioValue,
                 onChanged: handleRadioValueChanged,
               ),
-						Text('I want to be active regularly', style: style,)
+              Text(
+                'I want to be active regularly',
+                style: style,
+              )
             ],
           ),
           Row(
@@ -98,7 +149,7 @@ class _BackdropContentState extends State<BackdropContent> {
                 groupValue: radioValue,
                 onChanged: handleRadioValueChanged,
               ),
-						Text('I can only participate once', style: style),
+              Text('I can only participate once', style: style),
             ],
           ),
           Row(
@@ -108,7 +159,7 @@ class _BackdropContentState extends State<BackdropContent> {
                 groupValue: radioValue,
                 onChanged: handleRadioValueChanged,
               ),
-						Text('I want to see all opportunities', style: style)
+              Text('I want to see all opportunities', style: style)
             ],
           ),
         ],
@@ -138,6 +189,17 @@ class _BackdropContentState extends State<BackdropContent> {
     );
   }
 
+  void _setKeyword(keyword) {
+    Firestore.instance.collection('Projects').getDocuments().then((snapshot) {
+      snapshot.documents.forEach((doc) {
+        if (doc.data['title'].contains(keyword))
+          doc.reference.updateData({'visibility': true});
+        else
+          doc.reference.updateData({'visibility': false});
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -155,21 +217,27 @@ class _BackdropContentState extends State<BackdropContent> {
                     hintText: 'Filter by key words...',
                     prefixIcon: Icon(Icons.search),
                     border: InputBorder.none),
+                onSubmitted: (text) => _setKeyword(text),
               ),
               SizedBox(
                 height: 16.0,
               ),
-              _buildItem(
-                'Location',
-                TextField(
+/*                TextField(
                   decoration: InputDecoration(
                       fillColor: Colors.white,
                       filled: true,
                       hintText: 'Stadt',
                       prefixIcon: Icon(Icons.location_city),
                       border: InputBorder.none),
-                ),
-              ),
+                ),*/
+
+              _buildItem(
+                  'Location',
+                  Slider(
+                      min: 0.0,
+                      max: 100.0,
+                      value: _sliderValue,
+                      onChanged: (newValue) {})),
               _buildItem(
                 'Date',
                 DateAndTimePickerDemo(),
@@ -189,7 +257,7 @@ class _BackdropContentState extends State<BackdropContent> {
                   },
                 ),
               ),
-							SizedBox(height: 30.0)
+              SizedBox(height: 30.0)
             ],
           ),
         ),
