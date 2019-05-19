@@ -7,17 +7,37 @@ class ProjectOverview extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       //stream: answerStream,
-      stream: Firestore.instance.collection('Projects').snapshots(),
+      stream: Firestore.instance.collection('Projects')
+          .snapshots(),
+
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
 
-        return buildListView(context, snapshot.data.documents);
+        var documents = snapshot.data.documents;
+        documents
+          ..sort((a, b) =>
+          (Project
+              .fromSnapshot(a)
+              .time != null && Project
+              .fromSnapshot(b)
+              .time != null) ? (Project
+              .fromSnapshot(a)
+              .time
+              .isBefore(Project
+              .fromSnapshot(b)
+              .time) ? -1 : 1) :
+          (Project
+              .fromSnapshot(b)
+              .time != null && Project
+              .fromSnapshot(a)
+              .time == null) ? 1 : -1;
+              return buildListView(context, snapshot.data.documents);
       },
     );
   }
 
-  ListView buildListView(
-      BuildContext context, List<DocumentSnapshot> snapshot) {
+  ListView buildListView(BuildContext context,
+      List<DocumentSnapshot> snapshot) {
     return ListView(
 			shrinkWrap: true,
       primary: false,
@@ -49,34 +69,34 @@ class ProjectOverview extends StatelessWidget {
               children: <Widget>[
                 Image.network(project.picture, fit: BoxFit.cover),
                 Positioned(
-									bottom: 5.0,
-									left: 5.0,
-									child: Container(
-										width: MediaQuery.of(context).size.width - 100.0,
-										height: project.title.length > 30 ? 55.0 : 30.0,
-										color: Colors.black.withOpacity(0.25),
-									),
-								),
+                  bottom: 5.0,
+                  left: 5.0,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width - 100.0,
+                    height: project.title.length > 30 ? 55.0 : 30.0,
+                    color: Colors.black.withOpacity(0.25),
+                  ),
+                ),
                 Positioned(
                   bottom: 10.0,
                   left: 10.0,
                   child: Container(
                     width: MediaQuery.of(context).size.width - 100.0,
                     child: Text(project.title,
-                          style: Theme.of(context)
-                              .textTheme
-                              .title
-                              .copyWith(color: Colors.white)),
+                        style: Theme.of(context)
+                            .textTheme
+                            .title
+                            .copyWith(color: Colors.white)),
                   ),
                 ),
                 if (project.time != null)
                   Positioned(
-                      top: 10.0,
-                      right: 10.0,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.blue, borderRadius: BorderRadius.circular(15.0)),
-                        child: Padding(
+                    top: 10.0,
+                    right: 10.0,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.blue, borderRadius: BorderRadius.circular(15.0)),
+                      child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                               (_getDayTextFor(project.time
@@ -86,8 +106,8 @@ class ProjectOverview extends StatelessWidget {
                                   .textTheme
                                   .title
                                   .copyWith(color: Colors.white))),
-                        ),
-                      )
+                    ),
+                  )
               ],
             ),
           ),
@@ -96,7 +116,7 @@ class ProjectOverview extends StatelessWidget {
     );
   }
 
-  String _getDayTextFor(int days){
+  String _getDayTextFor(int days) {
     if (days == 0)
       return 'today';
     else
