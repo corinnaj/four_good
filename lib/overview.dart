@@ -55,12 +55,38 @@ class ProjectOverview extends StatelessWidget {
                             .textTheme
                             .title
                             .copyWith(color: Colors.white))),
+                if (project.time != null)
+                  Positioned(
+                      top: 10.0,
+                      right: 10.0,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.blue, borderRadius: BorderRadius.circular(15.0)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                              (_getDayTextFor(project.time
+                                  .difference(DateTime.now())
+                                  .inDays)),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .title
+                                  .copyWith(color: Colors.white))),
+                        ),
+                      )
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  String _getDayTextFor(int days){
+    if (days == 0)
+      return 'today';
+    else
+      return 'in ' + days.toString() + ' days';
   }
 }
 
