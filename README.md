@@ -31,3 +31,12 @@ Invite your friends to 4Good events using your favourite messenger. More help, m
 
 To communicate with externally hosted projects you will have to visit their external website, but you can add the project to your 4Good project overview to never miss anything.
 
+## How we built it
+
+We used the Flutter framework in Android Studio. Our backend database is Firebase.
+
+## Challenges
+
+A lot of volunteering websites and apps exist, yet many people don't know any of them. Why are many so unknown? Can we make it easier for people wanting to volunteer (so they don't have to find and search every site individually) and event organizers (so they can choose the site they like best instead of creating ten entries in ten different tools)?
+
+Many volunteering sites are for long term commitments with interviews and other processes. Can we make an app that also allows very informal, spontaneous volunteering?
