@@ -73,7 +73,7 @@ class ProjectOverview extends StatelessWidget {
                                   .title
                                   .copyWith(color: Colors.white))),
                         ),
-                      );
+                      )
               ],
             ),
           ),
