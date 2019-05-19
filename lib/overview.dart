@@ -3,14 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:four_good/project_view.dart';
 
 class ProjectOverview extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       //stream: answerStream,
-			stream: Firestore.instance.collection('Projects').snapshots(),
+      stream: Firestore.instance.collection('Projects').snapshots(),
       builder: (context, snapshot) {
-      	print(snapshot);
+        print(snapshot);
         if (!snapshot.hasData) return LinearProgressIndicator();
 
         return buildListView(context, snapshot.data.documents);
@@ -29,7 +28,8 @@ class ProjectOverview extends StatelessWidget {
   Widget buildListItem(BuildContext context, DocumentSnapshot data) {
     final project = Project.fromSnapshot(data);
 
-    if (data.data['visibility'] != true) return Container();
+    if (data.data['visibility'] != true ||
+        data.data['commitVisibility'] != true) return Container();
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
       child: InkWell(

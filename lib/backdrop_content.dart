@@ -24,16 +24,20 @@ class _FilterItemState extends State<FilterItem> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => setState(() {
-        isSelected = !isSelected;
-        Firestore.instance.collection('Projects').getDocuments().then((snapshot) {
-          snapshot.documents.forEach((doc) {
-            if (doc.data['skills'] != null && doc.data['skills'].contains(widget.text))
-              doc.reference.updateData({'visibility': true});
-            else
-              doc.reference.updateData({'visibility': false});
-          });
-        });
-      }),
+            isSelected = !isSelected;
+            Firestore.instance
+                .collection('Projects')
+                .getDocuments()
+                .then((snapshot) {
+              snapshot.documents.forEach((doc) {
+                if (doc.data['skills'] != null &&
+                    doc.data['skills'].contains(widget.text))
+                  doc.reference.updateData({'visibility': true});
+                else
+                  doc.reference.updateData({'visibility': false});
+              });
+            });
+          }),
       child: Container(
         decoration: BoxDecoration(
             color: isSelected ? Colors.blue : Colors.white,
@@ -64,6 +68,8 @@ class BackdropContent extends StatefulWidget {
 class _BackdropContentState extends State<BackdropContent> {
   int radioValue;
 
+  double _sliderValue = 50.0;
+
   @override
   void initState() {
     super.initState();
@@ -74,6 +80,33 @@ class _BackdropContentState extends State<BackdropContent> {
     setState(() {
       radioValue = value;
     });
+    if (value == 0) {
+      Firestore.instance.collection('Projects').getDocuments().then((snapshot) {
+        snapshot.documents.forEach((doc) {
+          if (doc.data['regularly'] == true)
+            doc.reference.updateData({'commitVisibility': true});
+          else
+            doc.reference.updateData({'commitVisibility': false});
+        });
+      });
+    }
+    if (value == 1) {
+      Firestore.instance.collection('Projects').getDocuments().then((snapshot) {
+        snapshot.documents.forEach((doc) {
+          if (doc.data['regularly'] == true)
+            doc.reference.updateData({'commitVisibility': false});
+          else
+            doc.reference.updateData({'commitVisibility': true});
+        });
+      });
+    }
+    if (value == 2) {
+      Firestore.instance.collection('Projects').getDocuments().then((snapshot) {
+        snapshot.documents.forEach((doc) {
+            doc.reference.updateData({'commitVisibility': true});
+        });
+      });
+    }
   }
 
   Widget _buildSkillsView(
@@ -189,17 +222,22 @@ class _BackdropContentState extends State<BackdropContent> {
               SizedBox(
                 height: 16.0,
               ),
-              _buildItem(
-                'Location',
-                TextField(
+/*                TextField(
                   decoration: InputDecoration(
                       fillColor: Colors.white,
                       filled: true,
                       hintText: 'Stadt',
                       prefixIcon: Icon(Icons.location_city),
                       border: InputBorder.none),
-                ),
-              ),
+                ),*/
+
+              _buildItem(
+                  'Location',
+                  Slider(
+                      min: 0.0,
+                      max: 100.0,
+                      value: _sliderValue,
+                      onChanged: (newValue) {})),
               _buildItem(
                 'Date',
                 DateAndTimePickerDemo(),
