@@ -20,24 +20,28 @@ class ProjectDetailView extends StatefulWidget {
 
 class _ProjectDetailViewState extends State<ProjectDetailView> {
   Widget _buildDate(Project project) {
-        return Column(
-          children: <Widget>[
-            Row(children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: Icon(
-                    Icons.calendar_today,
-                    size: 30.0,
-                  ),
-                ),
-                Text(
-                  !project.regularly ? DateFormat('EEE, d MMM yyyy kk:mm').format(project.time) : 'Every ' + DateFormat('EEE kk:mm').format(project.time),
-                  style: Theme.of(context).textTheme.title,
-                )
-              ]),
-						SizedBox(height: 12.0,),
-          ],
-        );
+    return Column(
+      children: <Widget>[
+        Row(children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Icon(
+              Icons.calendar_today,
+              size: 30.0,
+            ),
+          ),
+          Text(
+            !project.regularly
+                ? DateFormat('EEE, d MMM yyyy kk:mm').format(project.time)
+                : 'Every ' + DateFormat('EEE kk:mm').format(project.time),
+            style: Theme.of(context).textTheme.title,
+          )
+        ]),
+        SizedBox(
+          height: 12.0,
+        ),
+      ],
+    );
   }
 
   Widget _buildCategories(Project project) {
@@ -58,17 +62,14 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
   Widget _buildSkills(Project project) {
     return Column(children: <Widget>[
       Center(
-        child: Padding(
-          padding: const EdgeInsets.all(1.0),
-          child: Wrap(
-              spacing: 1.0,
-              runSpacing: 1.0,
-              direction: Axis.horizontal,
-              children: project.neededSkills
-                  .map((neededSkill) =>
-                      BubbleItem(neededSkill.documentID, Colors.orange))
-                  .toList()),
-        ),
+        child: Wrap(
+            spacing: 8.0,
+            runSpacing: 8.0,
+            direction: Axis.horizontal,
+            children: project.neededSkills
+                .map((neededSkill) =>
+                    BubbleItem(neededSkill.documentID, Colors.orange))
+                .toList()),
       ),
       SizedBox(
         height: 16.0,
@@ -83,11 +84,12 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
         decoration: new BoxDecoration(color: Colors.indigoAccent[200]),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text('This project was provided by ' +
-				project.website,
+          child: Text('This project was provided by ' + project.website,
               textAlign: TextAlign.center,
-              style:
-                  Theme.of(context).textTheme.title.copyWith(color: Colors.white)),
+              style: Theme.of(context)
+                  .textTheme
+                  .title
+                  .copyWith(color: Colors.white)),
         ),
       ),
     );
@@ -108,12 +110,43 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
       ismyproject = true;
     });
     projectReference.updateData({'ismyproject': true});
-    Flushbar(
-      title: "Thanks for volunteering!",
-      message:
-          "You are assigned to this project. For an overview of your assigned projects visit your profile page.",
-      duration: Duration(seconds: 4),
-    )..show(context);
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => SimpleDialog(
+            contentPadding: EdgeInsets.all(24.0),
+            title: Text('Thanks for volunteering!'),
+            children: <Widget>[
+              Center(
+                child: new Container(
+                  width: 130.0,
+                  height: 130.0,
+                  decoration: new BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: new DecorationImage(
+                      fit: BoxFit.cover,
+                      image: new NetworkImage(
+                          'http://www.commage.org/wp-content/uploads/2016/05/image-for-swiss-report.jpg'),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 12.0,
+              ),
+              Text(
+                  'This is Helen, she is organizing the event and will be your point of contact.'),
+              SizedBox(
+                height: 12.0,
+              ),
+              Text(
+                  'Please arrive on time, the organizers are counting on you and the other volunteers to make this event a success.'),
+							SizedBox(
+								height: 12.0,
+							),
+              RaisedButton(child: Text('Add Event to my Calendar'), color: Colors.indigo, textColor: Colors.white, onPressed: () {Navigator.pop(context);}),
+            ],
+          ),
+    );
   }
 
   void _cancelIt(BuildContext context, DocumentReference projectReference) {
@@ -170,28 +203,39 @@ class _ProjectDetailViewState extends State<ProjectDetailView> {
                   width: 200, height: 200, child: _buildMap(context, project)),
             if (ismyproject == null || !ismyproject)
               Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: FlatButton.icon(
-                color: Theme.of(context).primaryColor,
-                textColor: Colors.white,
-                label: Text("Do it 4 Good"),
-                icon: const Icon(FontAwesomeIcons.handHoldingHeart, size: 18.0),
-                onPressed: () {
-                  _doIt(context, widget.projectDocument.reference);
-                },
-                splashColor: Colors.redAccent,
-              ))
+                    padding: EdgeInsets.all(12.0),
+                    color: Theme.of(context).primaryColor,
+                    textColor: Colors.white,
+                    label: Text("Do it 4 Good"),
+                    icon: const Icon(FontAwesomeIcons.handHoldingHeart,
+                        size: 18.0),
+                    onPressed: () {
+                      _doIt(context, widget.projectDocument.reference);
+                    },
+                    splashColor: Colors.redAccent,
+                  ),
+                ),
+              )
             else
               Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: FlatButton.icon(
-                color: Theme.of(context).primaryColor,
-                textColor: Colors.white,
-                label: Text("Can't make it anymore"),
-                icon: const Icon(FontAwesomeIcons.sadTear, size: 18.0),
-                onPressed: () {
-                  _cancelIt(context, widget.projectDocument.reference);
-                },
-                splashColor: Colors.redAccent,
-              )),
+                    padding: EdgeInsets.all(12.0),
+                    color: Theme.of(context).primaryColor,
+                    textColor: Colors.white,
+                    label: Text("Can't make it anymore"),
+                    icon: const Icon(FontAwesomeIcons.sadTear, size: 18.0),
+                    onPressed: () {
+                      _cancelIt(context, widget.projectDocument.reference);
+                    },
+                    splashColor: Colors.redAccent,
+                  ),
+                ),
+              ),
             if (project.isExternal)
               Center(
                   child: FlatButton.icon(
