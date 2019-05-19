@@ -69,7 +69,7 @@ class BackdropContent extends StatefulWidget {
 class _BackdropContentState extends State<BackdropContent> {
   int radioValue;
 
-  double _sliderValue = 50.0;
+  double _sliderValue = 300.0;
 
   @override
   void initState() {
@@ -104,7 +104,7 @@ class _BackdropContentState extends State<BackdropContent> {
     if (value == 2) {
       Firestore.instance.collection('Projects').getDocuments().then((snapshot) {
         snapshot.documents.forEach((doc) {
-            doc.reference.updateData({'commitVisibility': true});
+          doc.reference.updateData({'commitVisibility': true});
         });
       });
     }
@@ -233,7 +233,11 @@ class _BackdropContentState extends State<BackdropContent> {
                 ),*/
 
               _buildItem(
-                  'Location not more then ' + _sliderValue.toInt().toString() + 'km away:',
+                  (_sliderValue < 300.0)
+                      ? 'Location not more then ' +
+                          _sliderValue.toInt().toString() +
+                          'km away:'
+                      : 'No location restrictions!',
                   Slider(
                       min: 0.0,
                       max: 300.0,
@@ -241,26 +245,39 @@ class _BackdropContentState extends State<BackdropContent> {
                       activeColor: Colors.white,
                       inactiveColor: Colors.black,
                       onChanged: (newValue) {
-                        setState((){
+                        setState(() {
                           _sliderValue = newValue;
-                          LatLng currentPosition = LatLng(52.394155, 13.132243);
-                          Firestore.instance.collection('Projects').getDocuments().then((snapshot) {
-                            snapshot.documents.forEach((doc) {
-                              if (doc.data['place'] == null)
-                                doc.reference.updateData({'distanceVisibility': false});
-                              else {
-                                Distance distance = new Distance();
-                                double kmDistance = distance.as(LengthUnit.Kilometer, currentPosition, new LatLng(doc['place'].latitude, doc['place'].longitude));
-                                if (kmDistance >= _sliderValue) {
-                                  doc.reference.updateData({'distanceVisibility': false});
-                                }
-                                else {
-                                  doc.reference.updateData({'distanceVisibility': true});
-                                }
+                        });
+                      },
+                      onChangeEnd: (newValue) {
+                        LatLng currentPosition = LatLng(52.394155, 13.132243);
+                        Firestore.instance
+                            .collection('Projects')
+                            .getDocuments()
+                            .then((snapshot) {
+                          snapshot.documents.forEach((doc) {
+                            if (_sliderValue == 300.0) {
+                              doc.reference
+                                  .updateData({'distanceVisibility': true});
+                            } else if (doc.data['place'] == null)
+                              doc.reference
+                                  .updateData({'distanceVisibility': false});
+                            else {
+                              Distance distance = new Distance();
+                              double kmDistance = distance.as(
+                                  LengthUnit.Kilometer,
+                                  currentPosition,
+                                  new LatLng(doc['place'].latitude,
+                                      doc['place'].longitude));
+                              if (kmDistance >= _sliderValue) {
+                                doc.reference
+                                    .updateData({'distanceVisibility': false});
+                              } else {
+                                doc.reference
+                                    .updateData({'distanceVisibility': true});
                               }
-                            });
+                            }
                           });
-
                         });
                       })),
               _buildItem(
