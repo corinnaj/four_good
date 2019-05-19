@@ -134,6 +134,8 @@ class ProjectOverview extends StatelessWidget {
   String _getDayTextFor(int days) {
     if (days == 0)
       return 'today';
+    if (days == 1)
+      return 'tommorow';
     else
       return 'in ' + days.toString() + ' days';
   }
