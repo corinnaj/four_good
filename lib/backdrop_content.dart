@@ -23,7 +23,17 @@ class _FilterItemState extends State<FilterItem> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => setState(() => isSelected = !isSelected),
+      onTap: () => setState(() {
+        isSelected = !isSelected;
+        Firestore.instance.collection('Projects').getDocuments().then((snapshot) {
+          snapshot.documents.forEach((doc) {
+            if (doc.data['skills'] != null && doc.data['skills'].contains(widget.text))
+              doc.reference.updateData({'visibility': true});
+            else
+              doc.reference.updateData({'visibility': false});
+          });
+        });
+      }),
       child: Container(
         decoration: BoxDecoration(
             color: isSelected ? Colors.blue : Colors.white,
