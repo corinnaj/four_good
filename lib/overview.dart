@@ -9,7 +9,6 @@ class ProjectOverview extends StatelessWidget {
       //stream: answerStream,
       stream: Firestore.instance.collection('Projects').snapshots(),
       builder: (context, snapshot) {
-        print(snapshot);
         if (!snapshot.hasData) return LinearProgressIndicator();
 
         return buildListView(context, snapshot.data.documents);
@@ -20,6 +19,8 @@ class ProjectOverview extends StatelessWidget {
   ListView buildListView(
       BuildContext context, List<DocumentSnapshot> snapshot) {
     return ListView(
+			shrinkWrap: true,
+      primary: false,
       padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
       children: snapshot.map((data) => buildListItem(context, data)).toList(),
     );
