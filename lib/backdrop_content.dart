@@ -42,11 +42,10 @@ class _FilterItemState extends State<FilterItem> {
 }
 
 class BackdropContent extends StatefulWidget {
+  //final StreamSink optionsSink;
 
-	//final StreamSink optionsSink;
-
-	//BackdropContent(this.optionsSink);
-	BackdropContent();
+  //BackdropContent(this.optionsSink);
+  BackdropContent();
 
   @override
   _BackdropContentState createState() => _BackdropContentState();
@@ -81,9 +80,9 @@ class _BackdropContentState extends State<BackdropContent> {
   }
 
   Widget _buildRadioButtons() {
-  	TextStyle style = TextStyle(color: Colors.white);
+    TextStyle style = TextStyle(color: Colors.white);
     return Theme(
-			data: ThemeData(brightness: Brightness.dark),
+      data: ThemeData(brightness: Brightness.dark),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -94,7 +93,10 @@ class _BackdropContentState extends State<BackdropContent> {
                 groupValue: radioValue,
                 onChanged: handleRadioValueChanged,
               ),
-						Text('I want to be active regularly', style: style,)
+              Text(
+                'I want to be active regularly',
+                style: style,
+              )
             ],
           ),
           Row(
@@ -104,7 +106,7 @@ class _BackdropContentState extends State<BackdropContent> {
                 groupValue: radioValue,
                 onChanged: handleRadioValueChanged,
               ),
-						Text('I can only participate once', style: style),
+              Text('I can only participate once', style: style),
             ],
           ),
           Row(
@@ -114,7 +116,7 @@ class _BackdropContentState extends State<BackdropContent> {
                 groupValue: radioValue,
                 onChanged: handleRadioValueChanged,
               ),
-						Text('I want to see all opportunities', style: style)
+              Text('I want to see all opportunities', style: style)
             ],
           ),
         ],
@@ -144,6 +146,17 @@ class _BackdropContentState extends State<BackdropContent> {
     );
   }
 
+  void _setKeyword(keyword) {
+    Firestore.instance.collection('Projects').snapshots().listen((snapshot) {
+      snapshot.documents.forEach((doc) {
+        if (doc.data['title'].contains(keyword))
+          doc.reference.updateData({'visibility': true});
+        else
+          doc.reference.updateData({'visibility': false});
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -161,7 +174,7 @@ class _BackdropContentState extends State<BackdropContent> {
                     hintText: 'Filter by key words...',
                     prefixIcon: Icon(Icons.search),
                     border: InputBorder.none),
-										//onChanged: (text) => widget.optionsSink.add(MyFilterOptions(text)),
+                onChanged: (text) => _setKeyword(text),
               ),
               SizedBox(
                 height: 16.0,
@@ -196,7 +209,7 @@ class _BackdropContentState extends State<BackdropContent> {
                   },
                 ),
               ),
-							SizedBox(height: 30.0)
+              SizedBox(height: 30.0)
             ],
           ),
         ),

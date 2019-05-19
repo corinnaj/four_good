@@ -29,6 +29,7 @@ class ProjectOverview extends StatelessWidget {
   Widget buildListItem(BuildContext context, DocumentSnapshot data) {
     final project = Project.fromSnapshot(data);
 
+    if (project.visibility != true) return Container();
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
       child: InkWell(
@@ -76,6 +77,7 @@ class Project {
   final bool ismyproject;
   final List categories;
   final List neededSkills;
+  final bool visibility;
 
   Project.fromMap(Map<String, dynamic> map)
       : assert(map['title'] != null),
@@ -91,7 +93,8 @@ class Project {
         ismyproject = map['ismyproject'],
         regularly = map['regularly'],
         categories = map['categories'],
-        neededSkills = map['neededSkills'];
+        neededSkills = map['neededSkills'],
+        visibility = map['visibility'];
 
   Project.fromSnapshot(DocumentSnapshot snapshot) : this.fromMap(snapshot.data);
 }
