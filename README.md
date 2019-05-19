@@ -23,6 +23,10 @@ Our tool helps you find the projects that fit your wishes. We can filter events 
 
 Invite your friends to 4Good events using your favourite messenger. More help, more engagement, more fun.
 
+### Want to help, but your local volunteering opportunities are scattered all over the web?
+
+4Good also displays projects from external sites, so you don't have to search every site separately.
+
 ### Want to volunteer at an external event, but still keep track of it?
 
 To communicate with externally hosted projects you will have to visit their external website, but you can add the project to your 4Good project overview to never miss anything.
