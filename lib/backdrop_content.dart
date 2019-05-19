@@ -93,10 +93,10 @@ class _BackdropContentState extends State<BackdropContent> {
     if (value == 1) {
       Firestore.instance.collection('Projects').getDocuments().then((snapshot) {
         snapshot.documents.forEach((doc) {
-          if (doc.data['regularly'] == true)
-            doc.reference.updateData({'commitVisibility': false});
-          else
+          if (doc.data['regularly'] == false)
             doc.reference.updateData({'commitVisibility': true});
+          else
+            doc.reference.updateData({'commitVisibility': false});
         });
       });
     }
