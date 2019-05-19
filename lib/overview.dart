@@ -7,18 +7,38 @@ class ProjectOverview extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       //stream: answerStream,
-      stream: Firestore.instance.collection('Projects').snapshots(),
+      stream: Firestore.instance.collection('Projects')
+          .snapshots(),
+
       builder: (context, snapshot) {
         print(snapshot);
         if (!snapshot.hasData) return LinearProgressIndicator();
 
-        return buildListView(context, snapshot.data.documents);
+        var documents = snapshot.data.documents;
+        documents
+          ..sort((a, b) =>
+          (Project
+              .fromSnapshot(a)
+              .time != null && Project
+              .fromSnapshot(b)
+              .time != null) ? (Project
+              .fromSnapshot(a)
+              .time
+              .isBefore(Project
+              .fromSnapshot(b)
+              .time) ? -1 : 1) :
+          (Project
+              .fromSnapshot(b)
+              .time != null && Project
+              .fromSnapshot(a)
+              .time == null) ? 1 : -1;
+              return buildListView(context, snapshot.data.documents);
       },
     );
   }
 
-  ListView buildListView(
-      BuildContext context, List<DocumentSnapshot> snapshot) {
+  ListView buildListView(BuildContext context,
+      List<DocumentSnapshot> snapshot) {
     return ListView(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
       children: snapshot.map((data) => buildListItem(context, data)).toList(),
@@ -33,8 +53,10 @@ class ProjectOverview extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
       child: InkWell(
-        onTap: () => Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ProjectDetailView(projectDocument: data))),
+        onTap: () =>
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>
+                    ProjectDetailView(projectDocument: data))),
         child: Card(
           child: Container(
             height: 150.0,
@@ -50,29 +72,32 @@ class ProjectOverview extends StatelessWidget {
                     bottom: 10.0,
                     left: 10.0,
                     child: Text(project.title,
-                        style: Theme.of(context)
+                        style: Theme
+                            .of(context)
                             .textTheme
                             .title
                             .copyWith(color: Colors.white))),
                 if (project.time != null)
                   Positioned(
-                      top: 10.0,
-                      right: 10.0,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.blue, borderRadius: BorderRadius.circular(15.0)),
-                        child: Padding(
+                    top: 10.0,
+                    right: 10.0,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(15.0)),
+                      child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                               (_getDayTextFor(project.time
                                   .difference(DateTime.now())
                                   .inDays)),
-                              style: Theme.of(context)
+                              style: Theme
+                                  .of(context)
                                   .textTheme
                                   .title
                                   .copyWith(color: Colors.white))),
-                        ),
-                      )
+                    ),
+                  )
               ],
             ),
           ),
@@ -81,7 +106,7 @@ class ProjectOverview extends StatelessWidget {
     );
   }
 
-  String _getDayTextFor(int days){
+  String _getDayTextFor(int days) {
     if (days == 0)
       return 'today';
     else
