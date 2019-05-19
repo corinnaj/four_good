@@ -9,7 +9,6 @@ class ProjectOverview extends StatelessWidget {
       //stream: answerStream,
       stream: Firestore.instance.collection('Projects').snapshots(),
       builder: (context, snapshot) {
-        print(snapshot);
         if (!snapshot.hasData) return LinearProgressIndicator();
 
         return buildListView(context, snapshot.data.documents);
@@ -20,6 +19,8 @@ class ProjectOverview extends StatelessWidget {
   ListView buildListView(
       BuildContext context, List<DocumentSnapshot> snapshot) {
     return ListView(
+			shrinkWrap: true,
+      primary: false,
       padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
       children: snapshot.map((data) => buildListItem(context, data)).toList(),
     );
@@ -55,12 +56,38 @@ class ProjectOverview extends StatelessWidget {
                             .textTheme
                             .title
                             .copyWith(color: Colors.white))),
+                if (project.time != null)
+                  Positioned(
+                      top: 10.0,
+                      right: 10.0,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.blue, borderRadius: BorderRadius.circular(15.0)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                              (_getDayTextFor(project.time
+                                  .difference(DateTime.now())
+                                  .inDays)),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .title
+                                  .copyWith(color: Colors.white))),
+                        ),
+                      )
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  String _getDayTextFor(int days){
+    if (days == 0)
+      return 'today';
+    else
+      return 'in ' + days.toString() + ' days';
   }
 }
 
