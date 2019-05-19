@@ -31,9 +31,15 @@ Invite your friends to 4Good events using your favourite messenger. More help, m
 
 To communicate with externally hosted projects you will have to visit their external website, but you can add the project to your 4Good project overview to never miss anything.
 
-## How we built it
+## What and how we built it
 
-We used the Flutter framework in Android Studio. Our backend database is Firebase.
+We used the Flutter framework in Android Studio. Our backend database is Firebase. All information displayed is updated live if the Firebase data is updated.
+
+Our main screen is the project overview. The projects are sorted by timestamp and display when they will happen,  When filters are applied, this view is updated to only show the filtered events.
+
+If you tap on a project, a project view is opened with all details like description, time, location, etc. If it is an external project, you can save it and visit the matching external website. If it is a direct 4Good project, volunteering will directly notify the project organisers.
+
+One of the other main parts is the profile screen with your own information (e.g. your location and skills) and the projects you volunteered for.
 
 ## Challenges
 
