@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:four_good/date_time_picker.dart';
 import 'package:latlong/latlong.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class FilterItem extends StatefulWidget {
   final String text;
@@ -211,6 +212,27 @@ class _BackdropContentState extends State<BackdropContent> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
+              FlatButton.icon(
+                padding: EdgeInsets.all(12.0),
+                color: Theme.of(context).primaryColor,
+                textColor: Colors.white,
+                label: Text("Remove all filters"),
+                icon: const Icon(FontAwesomeIcons.minusCircle, size: 18.0),
+                onPressed: () {
+                  setState(() {
+                    radioValue = 2;
+                    _sliderValue = 300.0;
+                  });
+                  Firestore.instance.collection('Projects').getDocuments().then((snapshot) {
+                    snapshot.documents.forEach((doc) {
+                      doc.reference.updateData({'visibility': true});
+                      doc.reference.updateData({'visibility': true});
+                      doc.reference.updateData({'distanceVisibility': true});
+                    });
+                  });
+                },
+                splashColor: Theme.of(context).accentColor
+              ),
               TextField(
                 decoration: InputDecoration(
                     fillColor: Colors.white,
