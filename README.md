@@ -46,3 +46,7 @@ One of the other main parts is the profile screen with your own information (e.g
 A lot of volunteering websites and apps exist, yet many people don't know any of them. Why are many so unknown? Can we make it easier for people wanting to volunteer (so they don't have to find and search every site individually) and event organizers (so they can choose the site they like best instead of creating ten entries in ten different tools)?
 
 Many volunteering sites are for long term commitments with interviews and other processes. Can we make an app that also allows very informal, spontaneous volunteering?
+
+# HackHPI
+
+This was a submission for HackHPI 2019, more details can be found on our [devpost post](https://devpost.com/software/four_good).
