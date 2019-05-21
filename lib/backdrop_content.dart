@@ -225,7 +225,7 @@ class _BackdropContentState extends State<BackdropContent> {
                   });
                   Firestore.instance.collection('Projects').getDocuments().then((snapshot) {
                     snapshot.documents.forEach((doc) {
-                      doc.reference.updateData({'visibility': true});
+                      doc.reference.updateData({'commitVisibility': true});
                       doc.reference.updateData({'visibility': true});
                       doc.reference.updateData({'distanceVisibility': true});
                     });
